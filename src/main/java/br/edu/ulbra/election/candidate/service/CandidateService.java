@@ -4,7 +4,9 @@ import br.edu.ulbra.election.candidate.exception.GenericOutputException;
 import br.edu.ulbra.election.candidate.input.v1.CandidateInput;
 import br.edu.ulbra.election.candidate.model.Candidate;
 import br.edu.ulbra.election.candidate.output.v1.CandidateOutput;
+import br.edu.ulbra.election.candidate.output.v1.ElectionOutput;
 import br.edu.ulbra.election.candidate.output.v1.GenericOutput;
+import br.edu.ulbra.election.candidate.output.v1.PartyOutput;
 import br.edu.ulbra.election.candidate.repository.CandidateRepository;
 import org.apache.commons.lang.StringUtils;
 import org.modelmapper.ModelMapper;
@@ -41,7 +43,17 @@ public class CandidateService {
         this.validateInput(candidateInput);
         Candidate candidate = modelMapper.map(candidateInput, Candidate.class);
         candidate = candidateRepository.save(candidate);
-        return modelMapper.map(candidate, CandidateOutput.class);
+        CandidateOutput candidateOutput = modelMapper.map(candidate, CandidateOutput.class);
+
+        ElectionOutput electionOutput = new ElectionOutput();
+        electionOutput.setId(candidate.getElectionId());
+        candidateOutput.setElectionOutput(electionOutput);
+
+        PartyOutput partyOutput = new PartyOutput();
+        partyOutput.setId(candidate.getPartyId());
+        candidateOutput.setPartyOutput(partyOutput);
+
+        return candidateOutput;
     }
 
     public CandidateOutput getById(Long candidateId){

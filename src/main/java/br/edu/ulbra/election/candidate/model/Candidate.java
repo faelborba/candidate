@@ -15,7 +15,7 @@ public class Candidate {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="number")
     private Long numberElection;
 
     @Column(nullable = false)
