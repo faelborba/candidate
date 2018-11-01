@@ -68,7 +68,8 @@ public class CandidateService {
 
         candidate.setName(candidateInput.getName());
         candidate.setNumberElection(candidateInput.getNumberElection());
-        //candidate.setElectionOutput();
+        candidate.setElectionId(candidateInput.getElectionId());
+        candidate.setPartyId(candidateInput.getPartyId());
         candidate = candidateRepository.save(candidate);
         return modelMapper.map(candidate, CandidateOutput.class);
     }

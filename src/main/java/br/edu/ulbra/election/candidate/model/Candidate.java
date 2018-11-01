@@ -19,10 +19,10 @@ public class Candidate {
     private Long numberElection;
 
     @Column(nullable = false)
-    private ElectionOutput electionOutput;
+    private Long electionId;
 
     @Column(nullable = false)
-    private PartyOutput partyOutput;
+    private Long partyId;
 
     public Long getId() {
         return id;
@@ -48,19 +48,19 @@ public class Candidate {
         this.numberElection = numberElection;
     }
 
-    public ElectionOutput getElectionOutput() {
-        return electionOutput;
+    public Long getElectionId() {
+        return electionId;
     }
 
-    public void setElectionOutput(ElectionOutput electionOutput) {
-        this.electionOutput = electionOutput;
+    public void setElectionId(Long electionId) {
+        this.electionId = electionId;
     }
 
-    public PartyOutput getPartyOutput() {
-        return partyOutput;
+    public Long getPartyId() {
+        return partyId;
     }
 
-    public void setPartyOutput(PartyOutput partyOutput) {
-        this.partyOutput = partyOutput;
+    public void setPartyId(Long partyId) {
+        this.partyId = partyId;
     }
 }
