@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,8 +36,22 @@ public class CandidateService {
     }
 
     public List<CandidateOutput> getAll(){
-        Type candidateOutputListType = new TypeToken<List<CandidateOutput>>(){}.getType();
-        return modelMapper.map(candidateRepository.findAll(), candidateOutputListType);
+        /*Type candidateOutputListType = new TypeToken<List<CandidateOutput>>(){}.getType();*/
+        List<Candidate> candidateList = (List<Candidate>) candidateRepository.findAll();
+        List<CandidateOutput> candidateOutputList = new ArrayList<>();
+        for(Candidate candidate : candidateList){
+            CandidateOutput candidateOutput = modelMapper.map(candidate,CandidateOutput.class);
+            ElectionOutput electionOutput = new ElectionOutput();
+            electionOutput.setId(candidate.getElectionId());
+            candidateOutput.setElectionOutput(electionOutput);
+            PartyOutput partyOutput = new PartyOutput();
+            partyOutput.setId(candidate.getPartyId());
+            candidateOutput.setPartyOutput(partyOutput);
+
+            candidateOutputList.add(candidateOutput);
+        }
+        /*return modelMapper.map(candidateRepository.findAll(), candidateOutputList);*/
+        return candidateOutputList;
     }
 
     public CandidateOutput create(CandidateInput candidateInput){
@@ -64,7 +79,18 @@ public class CandidateService {
         if (candidate == null){
             throw new GenericOutputException(MESSAGE_CANDIDATE_NOT_FOUND);
         }
-        return modelMapper.map(candidate, CandidateOutput.class);
+
+        CandidateOutput candidateOutput = modelMapper.map(candidate, CandidateOutput.class);
+
+        ElectionOutput electionOutput = new ElectionOutput();
+        electionOutput.setId(candidate.getElectionId());
+        candidateOutput.setElectionOutput(electionOutput);
+
+        PartyOutput partyOutput = new PartyOutput();
+        partyOutput.setId(candidate.getPartyId());
+        candidateOutput.setPartyOutput(partyOutput);
+
+        return modelMapper.map(candidateOutput, CandidateOutput.class);
     }
 
     public CandidateOutput update(Long candidateId, CandidateInput candidateInput){
