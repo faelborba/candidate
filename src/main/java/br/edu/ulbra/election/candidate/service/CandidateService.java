@@ -133,6 +133,10 @@ public class CandidateService {
             throw new GenericOutputException("Invalid name");
         }
 
+        if (validateName(candidateInput.getName())){
+            throw new GenericOutputException("Invalid name");
+        }
+
         if (candidateInput.getPartyId() == null){
             throw new GenericOutputException("Invalid party ID");
         }
@@ -144,5 +148,17 @@ public class CandidateService {
         if (candidateInput.getElectionId() == null){
             throw new GenericOutputException("Invalid election ID");
         }
+    }
+
+    private boolean validateName(String name){
+        if(name.split(" ").length == 1){// verificando se tem somente o primeiro nome
+            System.out.println("Sem sobre nome");
+            return true;
+        }
+        if(name.split(" ")[0].length() < 5){
+            System.out.println("Sem tamanho");
+            return true;
+        }
+        return false;
     }
 }
