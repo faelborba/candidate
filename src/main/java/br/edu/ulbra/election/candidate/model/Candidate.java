@@ -1,8 +1,5 @@
 package br.edu.ulbra.election.candidate.model;
 
-import br.edu.ulbra.election.candidate.output.v1.ElectionOutput;
-import br.edu.ulbra.election.candidate.output.v1.PartyOutput;
-
 import javax.persistence.*;
 
 @Entity
@@ -15,7 +12,7 @@ public class Candidate {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, name="number")
+    @Column(nullable = false)
     private Long numberElection;
 
     @Column(nullable = false)
@@ -63,4 +60,5 @@ public class Candidate {
     public void setPartyId(Long partyId) {
         this.partyId = partyId;
     }
+
 }
