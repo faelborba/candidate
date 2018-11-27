@@ -37,3 +37,4 @@ info:
 url:
   election-service: 'http://localhost:8084'
   party-service: 'http://localhost:8083'
+  result-service: 'http://localhost:8084'

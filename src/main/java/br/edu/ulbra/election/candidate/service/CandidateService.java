@@ -2,13 +2,11 @@ package br.edu.ulbra.election.candidate.service;
 
 import br.edu.ulbra.election.candidate.client.ElectionClientService;
 import br.edu.ulbra.election.candidate.client.PartyClientService;
+import br.edu.ulbra.election.candidate.client.ResultClientService;
 import br.edu.ulbra.election.candidate.exception.GenericOutputException;
 import br.edu.ulbra.election.candidate.input.v1.CandidateInput;
 import br.edu.ulbra.election.candidate.model.Candidate;
-import br.edu.ulbra.election.candidate.output.v1.CandidateOutput;
-import br.edu.ulbra.election.candidate.output.v1.ElectionOutput;
-import br.edu.ulbra.election.candidate.output.v1.GenericOutput;
-import br.edu.ulbra.election.candidate.output.v1.PartyOutput;
+import br.edu.ulbra.election.candidate.output.v1.*;
 import br.edu.ulbra.election.candidate.repository.CandidateRepository;
 import feign.FeignException;
 import org.apache.commons.lang.StringUtils;
@@ -25,7 +23,7 @@ public class CandidateService {
     private final CandidateRepository candidateRepository;
     private final ElectionClientService electionClientService;
     private final PartyClientService partyClientService;
-
+    private final ResultClientService resultClientService;
     private final ModelMapper modelMapper;
 
     private static final String MESSAGE_INVALID_ID = "Invalid id";
@@ -33,11 +31,12 @@ public class CandidateService {
     private static final String MESSAGE_CANDIDATE_NOT_FOUND = "Candidate not found";
 
     @Autowired
-    public CandidateService(CandidateRepository candidateRepository, ModelMapper modelMapper, ElectionClientService electionClientService, PartyClientService partyClientService){
+    public CandidateService(CandidateRepository candidateRepository, ModelMapper modelMapper, ElectionClientService electionClientService, PartyClientService partyClientService, ResultClientService resultClientService){
         this.candidateRepository = candidateRepository;
         this.modelMapper = modelMapper;
         this.electionClientService = electionClientService;
         this.partyClientService = partyClientService;
+        this.resultClientService = resultClientService;
     }
 
     public List<CandidateOutput> getAll(){
@@ -94,6 +93,11 @@ public class CandidateService {
         Candidate candidate = candidateRepository.findById(candidateId).orElse(null);
         if (candidate == null){
             throw new GenericOutputException(MESSAGE_CANDIDATE_NOT_FOUND);
+        }
+
+        ResultOutput resultOutput = resultClientService.getById(candidateId);
+        if(resultOutput.getTotalVotes() > 0){
+            throw new GenericOutputException("Error, candidate with votes.!");
         }
 
         candidateRepository.delete(candidate);
