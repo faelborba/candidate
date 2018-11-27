@@ -77,6 +77,11 @@ public class CandidateService {
             throw new GenericOutputException(MESSAGE_CANDIDATE_NOT_FOUND);
         }
 
+        ResultOutput resultOutput = resultClientService.getById(candidateId);
+        if(resultOutput.getTotalVotes() > 0){
+            throw new GenericOutputException("Error, candidate with votes.!");
+        }
+
         candidate.setElectionId(candidateInput.getElectionId());
         candidate.setNumberElection(candidateInput.getNumberElection());
         candidate.setName(candidateInput.getName());
